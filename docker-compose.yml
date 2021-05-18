@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  server:
+    build: ../server
+    container_name: server
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+
+  client:
+    build: ../client
+    container_name: client
+    depends_on:
+      - server
+    ports:
+      - 3001:3001
+
+  nameserver:
+    build: ../nameserver
+    container_name: nameserver
+    depends_on:
+      - server
+    ports:
+      - 3002:3002
+
+  resourcemanager:
+    build: ../resourcemanager
+    container_name: resourcemanager
+    depends_on:
+      - server
+    ports:
+      - 3003:3003
+
+  #MongoDB
+  db:
+    image: mongo:4.2
+    container_name: db
+    restart: always
+    ports:
+      - 27017:27017
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
